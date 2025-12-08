@@ -76,11 +76,11 @@ export default function SponsorsSection() {
    ];
 
    return (
-      <section className='relative bg-[#F4F9F4] pb-20 pt-12'>
+      <section className='relative  pb-20 pt-12 z-0'>
          {/* top green line */}
-         <div className='pointer-events-none absolute inset-x-0 top-0 h-4 bg-gradient-to-r from-[#6ACF4F] via-[#C7F0D1] to-[#6ACF4F]' />
+         <div className='pointer-events-none absolute inset-x-0 top-0 h-4 ' />
 
-         <div className='relative flex flex-col gap-24'>
+         <div className='relative flex flex-col gap-44'>
             {/* sponsors title + grid */}
             <div className='flex flex-col items-center text-center relative w-full '>
                {/* side leaves */}
@@ -138,40 +138,40 @@ export default function SponsorsSection() {
             </div>
 
             {/* leaders cards */}
-            <div className='mt-14 grid gap-6 lg:grid-cols-2 lpg-container pt-12 relative'>
+            <div className='mt-24 grid gap-6 lg:grid-cols-2 lpg-container relative'>
                {leaders.map(leader => (
                   <article
                      key={leader.name}
-                     className='relative overflow-hidden rounded-[32px] border border-[#D7E4FF] bg-white/95 px-6 pb-7 pt-10 shadow-[0_18px_40px_rgba(0,0,0,0.06)]'>
+                     className='relative overflow-visible rounded-t-[98px] border border-[#CCD2F4] bg-white/95 px-6 pb-7 pt-10 shadow-[0_18px_40px_rgba(0,0,0,0.06)] w-[480px] h-[620px]'>
                      {/* photo circle */}
-                     <div className='absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2'>
-                        <div className='flex h-28 w-28 items-center justify-center rounded-full bg-[#E7F0FF] shadow-[0_10px_30px_rgba(0,0,0,0.25)]'>
-                           <div className='relative h-24 w-24 overflow-hidden rounded-full bg-white'>
+                     <div className='absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 '>
+                        <div className='flex h-[270px] w-[270px] items-center justify-center rounded-full bg-[#CCD2F4] p-[4px]'>
+                           <div className='relative h-full w-full overflow-hidden rounded-full bg-white'>
                               <Image
                                  src={leader.photo}
                                  alt={leader.name}
                                  fill
-                                 className='object-cover'
+                                 className='object-contain'
                               />
                            </div>
                         </div>
                      </div>
 
-                     <div className='mt-10 text-center'>
-                        <h3 className='text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#1D3C8B]'>
+                     <div className='mt-38 text-center'>
+                        <h3 className='text-[24px] font-extrabold uppercase  '>
                            {leader.title}
                         </h3>
-                        <p className='mt-1 text-[13px] font-semibold text-[#243552]'>
+                        <p className='mt-1 text-[20px] font-medium '>
                            {leader.name}
                         </p>
 
-                        <div className='mt-2 space-y-0.5 text-[11px] leading-snug text-[#596B86]'>
+                        <div className='mt-2 space-y-2 text-[15px] font-light '>
                            {leader.lines.map(line => (
-                              <div key={line}>{line}</div>
+                              <div className="font-light opacity-80" key={line}>{line}</div>
                            ))}
                         </div>
 
-                        <p className='mt-4 text-[11px] leading-relaxed text-[#7B8EA5]'>
+                        <p className='mt-20 text-[15px] leading-relaxed   opacity-80'>
                            {leader.bio}
                         </p>
                      </div>
