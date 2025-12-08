@@ -7,6 +7,7 @@ import leaderImg2 from '../../../assets/leader-img/hasin-parfez.png';
 import folio1 from '../../../assets/Bento_Grid (7).png';
 import folio2 from '../../../assets/Bento_Grid (8).png';
 import sponserImg1 from './../../../assets/sponser-img/mgi.png';
+import arrowuiIcon from './../../../assets/ui-icons/Layer_1 (3).png';
 
 type Sponsor = {
    name: string;
@@ -70,7 +71,7 @@ compliance while expanding autogas services across Bangladesh.`,
 
 export default function SponsorsSection() {
    const sponsorRows: Sponsor[][] = [
-      sponsors.slice(0,2), // top row
+      sponsors.slice(0, 2), // top row
       sponsors.slice(3, 6), // middle row (4 items)
       sponsors.slice(6, 11), // bottom row (3 items)  -> adjust if you add more logos
    ];
@@ -138,45 +139,77 @@ export default function SponsorsSection() {
             </div>
 
             {/* leaders cards */}
-            <div className='mt-24 grid gap-6 lg:grid-cols-2 lpg-container relative'>
-               {leaders.map(leader => (
-                  <article
-                     key={leader.name}
-                     className='relative overflow-visible rounded-t-[98px] border border-[#CCD2F4] bg-white/95 px-6 pb-7 pt-10 shadow-[0_18px_40px_rgba(0,0,0,0.06)] w-[480px] h-[620px]'>
-                     {/* photo circle */}
-                     <div className='absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 '>
-                        <div className='flex h-[270px] w-[270px] items-center justify-center rounded-full bg-[#CCD2F4] p-[4px]'>
-                           <div className='relative h-full w-full overflow-hidden rounded-full bg-white'>
-                              <Image
-                                 src={leader.photo}
-                                 alt={leader.name}
-                                 fill
-                                 className='object-contain'
-                              />
+
+            <div className='relative '>
+               {/* side leaves */}
+               <div className='pointer-events-none absolute inset-y-0 -top-1/2 left-0 hidden w-[330px] lg:block opacity-10'>
+                  {/* green radial glow */}
+                  {/* <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,_#75B5534d,_transparent_70%)]' /> */}
+                  {/* leaf image */}
+                  <Image
+                     src={arrowuiIcon}
+                     alt=''
+                     fill
+                     className='object-contain'
+                  />
+               </div>
+               <div
+                  className=' pointer-events-none absolute inset-y-0 -top-1/2 right-0 hidden
+    w-[330px] lg:block opacity-10
+    transform -scale-x-100 origin-center
+  '>
+                  <Image
+                     src={arrowuiIcon}
+                     alt=''
+                     fill
+                     className='object-contain'
+                  />
+               </div>
+
+               <div className='mt-24 grid gap-6 lg:grid-cols-2 lpg-container relative  justify-center items-center'>
+                  {leaders.map(leader => (
+                     <article
+                        key={leader.name}
+                        className='relative overflow-visible rounded-t-[98px] border border-[#CCD2F4] bg-white/95 px-6 pb-7 pt-10 shadow-[0_18px_40px_rgba(0,0,0,0.06)] w-[480px] h-[620px] place-self-center'>
+                        {/* photo circle */}
+                        <div className='absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 '>
+                           <div className='flex h-[270px] w-[270px] items-center justify-center rounded-full bg-[#CCD2F4] p-[4px]'>
+                              <div className='relative h-full w-full overflow-hidden rounded-full bg-white'>
+                                 <Image
+                                    src={leader.photo}
+                                    alt={leader.name}
+                                    fill
+                                    className='object-contain'
+                                 />
+                              </div>
                            </div>
                         </div>
-                     </div>
 
-                     <div className='mt-38 text-center'>
-                        <h3 className='text-[24px] font-extrabold uppercase  '>
-                           {leader.title}
-                        </h3>
-                        <p className='mt-1 text-[20px] font-medium '>
-                           {leader.name}
-                        </p>
+                        <div className='mt-38 text-center'>
+                           <h3 className='text-[24px] font-extrabold uppercase  '>
+                              {leader.title}
+                           </h3>
+                           <p className='mt-1 text-[20px] font-medium '>
+                              {leader.name}
+                           </p>
 
-                        <div className='mt-2 space-y-2 text-[15px] font-light '>
-                           {leader.lines.map(line => (
-                              <div className="font-light opacity-80" key={line}>{line}</div>
-                           ))}
+                           <div className='mt-2 space-y-2 text-[15px] font-light '>
+                              {leader.lines.map(line => (
+                                 <div
+                                    className='font-light opacity-80'
+                                    key={line}>
+                                    {line}
+                                 </div>
+                              ))}
+                           </div>
+
+                           <p className='mt-20 text-[15px] leading-relaxed   opacity-80'>
+                              {leader.bio}
+                           </p>
                         </div>
-
-                        <p className='mt-20 text-[15px] leading-relaxed   opacity-80'>
-                           {leader.bio}
-                        </p>
-                     </div>
-                  </article>
-               ))}
+                     </article>
+                  ))}
+               </div>
             </div>
          </div>
       </section>
