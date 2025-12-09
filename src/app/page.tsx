@@ -8,6 +8,7 @@ import CentralCommitteeSection from './../components/home/sections/CentralCommit
 import WhyChooseUsSection from './../components/home/WhyChooseUsSection';
 import JoinWithUsSection from './../components/home/sections/JoinWithUsSection';
 import ServicesSection from './../components/home/sections/ServicesSection/index';
+import ContactUsSection from './../components/home/sections/ContactUsSection';
 
 export default function Home() {
    return (
@@ -20,6 +21,7 @@ export default function Home() {
          <JoinWithUsSection/>
          <ServicesSection/>
          <CentralCommitteeSection/>
+         <ContactUsSection/>
          <Footer/>
       </div>
    );
