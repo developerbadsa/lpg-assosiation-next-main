@@ -36,7 +36,7 @@ const ContactInfoCard = ({item}: {item: ContactItem}) => {
          </div>
 
          <div className='relative flex flex-col'>
-            <span className='text-[24px] font-bold uppercase '>
+            <span className='text-[22px] tracking-[-0.02] font-bold uppercase '>
                {item.label}
             </span>
             <span className='mt-[4px] text-[18px] font-medium leading-snug'>

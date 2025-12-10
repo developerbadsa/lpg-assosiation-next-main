@@ -54,8 +54,7 @@ body {
 
 
 .neon-pill {
-  position: relative;
-  border-radius: 9999px;              /* full pill */
+  position: relative;           /* full pill */
   border: 2px solid #b7ea87ba;         /* neon green border */
   background: transparent;
   /* outer glow */
