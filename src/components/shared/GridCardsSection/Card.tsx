@@ -11,6 +11,7 @@ export type AlbumCardData = {
 
 type AlbumCardProps = {
    album: AlbumCardData;
+      videos?: boolean;
 };
 
 export default function AlbumCard({album}: AlbumCardProps) {
