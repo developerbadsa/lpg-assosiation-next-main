@@ -1031,21 +1031,22 @@ function AdvisorCard({advisor}: {advisor: Advisor}) {
                      </div>
                   </div>
 
-<div className="mt-2 space-y-1">
-  {advisor.titleLines.map((line, idx) => {
-    const isObj = typeof line !== 'string';
-    const Icon = isObj ? line.icon : CapIcon;
-    const text = isObj ? line.name : line;
+                  <div className='mt-2 space-y-1'>
+                     {advisor.titleLines.map((line, idx) => {
+                        const isObj = typeof line !== 'string';
+                        const Icon = isObj ? line.icon : CapIcon;
+                        const text = isObj ? line.name : line;
 
-    return (
-      <div key={`${advisor.id}-t-${idx}`} className="flex items-start gap-2 text-[12px] text-white/90">
-        <Icon />
-        <span className="leading-snug">{text}</span>
-      </div>
-    );
-  })}
-</div>
-
+                        return (
+                           <div
+                              key={`${advisor.id}-t-${idx}`}
+                              className='flex items-start gap-2 text-[12px] text-white/90'>
+                              <Icon />
+                              <span className='leading-snug'>{text}</span>
+                           </div>
+                        );
+                     })}
+                  </div>
                </div>
             </div>
 
@@ -1081,19 +1082,18 @@ function Responsibilities({items}: {items: string[]}) {
 }
 
 function AdvisorRow({advisor, reverse}: {advisor: Advisor; reverse?: boolean}) {
-  return (
-    <div className="grid items-start gap-10 lg:grid-cols-2">
-      <div className={reverse ? 'lg:order-2' : 'lg:order-1'}>
-        <AdvisorCard advisor={advisor} />
-      </div>
+   return (
+      <div className='grid items-start gap-10 lg:grid-cols-2'>
+         <div className={reverse ? 'lg:order-2' : 'lg:order-1'}>
+            <AdvisorCard advisor={advisor} />
+         </div>
 
-      <div className={reverse ? 'lg:order-1' : 'lg:order-2'}>
-        <Responsibilities items={advisor.responsibilities} />
+         <div className={reverse ? 'lg:order-1' : 'lg:order-2'}>
+            <Responsibilities items={advisor.responsibilities} />
+         </div>
       </div>
-    </div>
-  );
+   );
 }
-
 
 /* ------------------------- mock data ------------------------- */
 
@@ -1132,7 +1132,7 @@ const MOCK_ADVISORS: Advisor[] = [
       name: 'DR. MOHAMMAD A. MOTALAB',
       titleLines: [
          {name: 'Professor', icon: CapIcon},
-         {name: 'Dept. of Mechanical Engineering, BUET', icon:  BagIcon},
+         {name: 'Dept. of Mechanical Engineering, BUET', icon: BagIcon},
       ],
       photo: advisor1,
       responsibilities: DEFAULT_RESP,
