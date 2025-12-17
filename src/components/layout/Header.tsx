@@ -22,7 +22,7 @@ const MAIN_NAV: NavItem[] = [
    {
       key: 'gallery',
       label: 'GALLERY',
-      href: '/gallery',
+      href: '#',
       children: [
          {label: 'PHOTO', href: '/gallery/photo'},
          {label: 'PRINT MEDIA', href: '/gallery/print-media-gallery'},
@@ -33,7 +33,7 @@ const MAIN_NAV: NavItem[] = [
    {
       key: 'committee',
       label: 'COMMITTEE',
-      href: '/committee',
+      href: '#',
       children: [
          {label: 'ADVISORS', href: '/committee/advisors'},
          {label: 'CENTRAL COMMITTEE', href: '/committee/central-committee'},
@@ -46,8 +46,9 @@ const MAIN_NAV: NavItem[] = [
       href: '#',
       children: [
          {label: 'Member List', href: '/members/all-members'},
-         {label: 'CENTRAL COMMITTEE', href: '/committee/central-committee'},
-         {label: 'ZONAL COMMITTEE', href: '/committee/zonal-committee'},
+         {label: 'Running LPG Stations', href: '/members/running-stations'},
+         {label: "On Going LPG Stations", href: '/members/on-going-stations'},
+         {label: "Pay Membership Fee", href: '#'},
       ],
    },
    {key: 'contact', label: 'CONTACT', href: '/contact'},
