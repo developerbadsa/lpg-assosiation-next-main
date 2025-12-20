@@ -6,11 +6,15 @@ import PhotoCard from './PhotoCard';
 import UploadCard from './UploadCard';
 import {MOCK_PHOTOS} from './mock';
 import type {GalleryPhoto} from './types';
+import CreateAlbumModal from '@components/ui/modal/CreateAlbumModal';
+
+
 
 export default function PhotoGallerySection() {
   const [items, setItems] = useState<GalleryPhoto[]>(MOCK_PHOTOS);
 
   const gridItems = useMemo(() => items, [items]);
+   const [openCreate, setOpenCreate] = useState(false);
 
   return (
     <section className='min-w-0'>
@@ -22,12 +26,12 @@ export default function PhotoGallerySection() {
         </h2>
 
         <div className='flex justify-end'>
-          <button
-            type='button'
-            className='inline-flex h-10 items-center gap-2 rounded-[6px] bg-[#009970] px-4 text-[12px] font-semibold text-white shadow-sm transition hover:brightness-110 active:brightness-95'>
-            <FolderPlus size={16} />
-            Create New Album
-          </button>
+      <button
+        type='button'
+        onClick={() => setOpenCreate(true)}
+        className='inline-flex h-10 items-center gap-2 rounded-[6px] bg-[#009970] px-4 text-[12px] font-semibold text-white'>
+        Create New Album
+      </button>
         </div>
       </div>
 
@@ -48,6 +52,15 @@ export default function PhotoGallerySection() {
           }}
         />
       </div>
+
+       <CreateAlbumModal
+        open={openCreate}
+        onClose={() => setOpenCreate(false)}
+        onCreate={async (payload) => {
+          // call API later
+          console.log(payload);
+        }}
+      />
     </section>
   );
 }
