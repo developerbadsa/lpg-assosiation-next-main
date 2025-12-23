@@ -3,8 +3,8 @@
 import Image, {type StaticImageData} from 'next/image';
 import {Direction} from './FramerMarqueeRow';
 
-import leaderImg1 from '@/assets/leader-img/md-serajul-mawla.png';
-import leaderImg2 from '@/assets/leader-img/hasin-parfez.png';
+import leaderImg1 from '@/assets/leader-img/SayedSajjadulKarimKabul.jpeg';
+import leaderImg2 from '@/assets/leader-img/MirAhasanUddinFarvez.jpeg';
 import folio1 from '@/assets/Bento_Grid (7).png';
 import folio2 from '@/assets/Bento_Grid (8).png';
 import sponserImg1 from '@/assets/sponser-img/mgi.png';
@@ -20,7 +20,7 @@ export type Sponsor = {
 type Leader = {
    name: string;
    title: string;
-   lines: string[];
+   lines?: string[];
    bio: string;
    photo: StaticImageData;
 };
@@ -52,13 +52,13 @@ const sponsors: Sponsor[] = [
 
 const leaders: Leader[] = [
    {
-      name: 'Mohammad Serajul Mawla',
+      name: 'Sayed Sajjadul Karim Kabul',
       title: 'PRESIDENT',
-      lines: [
-         'Mechanical Engineer, BUET',
-         'Managing Director, Saad Motors Ltd.',
-         'Managing Director, SMT Energy Ltd.',
-      ],
+      // lines: [
+      //    'Mechanical Engineer, BUET',
+      //    'Managing Director, Saad Motors Ltd.',
+      //    'Managing Director, SMT Energy Ltd.',
+      // ],
       bio: `Liquefied Petroleum Gas (Autogas) has gained global popularity 
 as an alternative clean fuel. Bangladesh has also adopted this fuel 
 to reduce emissions and reliance on traditional energy sources. 
@@ -68,13 +68,13 @@ and technical guidance.`,
       photo: leaderImg1,
    },
    {
-      name: 'Md. Hasin Parvez',
-      title: 'GENERAL SECRETARY',
-      lines: [
-         'CEO, Green Fuel Technologies Ltd.',
-         'Prop. Green Fuel CNG & LPG Conversion Center',
-         'Managing Director at Green Distribution Energy Services Ltd.',
-      ],
+      name: 'Mir Ahasan Uddin Farvez',
+      title: 'Member SECRETARY',
+      // lines: [
+      //    'CEO, Green Fuel Technologies Ltd.',
+      //    'Prop. Green Fuel CNG & LPG Conversion Center',
+      //    'Managing Director at Green Distribution Energy Services Ltd.',
+      // ],
       bio: `LPG is a clean-burning and cost-effective energy value and 
 environment friendly. The association helps members to maintain 
 highest safety standards, technical excellence and regulatory 
@@ -195,7 +195,7 @@ export default function SponsorsSection() {
                            </p>
 
                            <div className='mt-2 space-y-2 text-[15px] font-light'>
-                              {leader.lines.map(line => (
+                              {leader.lines && leader.lines.map(line => (
                                  <div
                                     className='font-light opacity-80'
                                     key={line}>

@@ -52,7 +52,7 @@ export default function PageHero({
 
          {/* content */}
          <div className='relative flex flex-col items-center  justify-center px-4 text-center text-white h-[70%] pb-6 '>
-            <h1 className='text-[32px] md:text-[48px] lg:text-[58px] font-bold leading-tight tracking-[-0.04em] mb-12'>
+            <h1 className='text-[32px] md:text-[38px] lg:text-[48px] font-bold leading-tight tracking-[-0.04em] mb-12'>
                {title}
             </h1>
 

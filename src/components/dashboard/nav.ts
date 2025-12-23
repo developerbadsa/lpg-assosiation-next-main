@@ -63,7 +63,18 @@ export const DASH_NAV: NavItem[] = [
   },
   { key: 'notices', label: 'Notices', href: '/dashboard-notices', icon: Bell },
   { key: 'downloads', label: 'Downloads', href: '/dashboard-downloads', icon: Download },
-  { key: 'settings', label: 'Setting', href: '/settings', icon: Settings },
+  {
+    key: 'settings',
+    label: 'Setting',
+    icon: Settings,
+    children: [
+      {label: 'Membership Fees', href: '/settings/membership-fees'},
+      {label: 'Division', href: '/settings/division'},
+      {label: 'District', href: '/settings/district'},
+      {label: 'Upazila/Thana', href: '/settings/upazila-thana'},
+      {label: 'SMS', href: '/settings/sms'},
+    ],
+  },
     { key: 'logout', label: 'Logout', href: '/', icon: LogOut },
 ];
 
