@@ -51,7 +51,7 @@ export type CreateCommitteeInput = {
 };
 
 export type CommitteeUpdateInput = {
-  id: string;
+  id: number;
 
   positionName: string;
   positionSlug: string;
