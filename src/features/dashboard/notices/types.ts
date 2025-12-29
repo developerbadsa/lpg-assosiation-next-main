@@ -27,3 +27,22 @@ export type CreateNoticeInput = {
   publishDate?: string; // newer doc might require (YYYY-MM-DD)
   attachments?: File[];
 };
+
+export type NoticeAttachment = {
+  id?: number | string;
+  name: string;
+  url: string;
+  fileType?: string | null;
+  fileSize?: number | null;
+};
+
+export type NoticeDetails = {
+  id: string;
+  title: string;
+  slug?: string;
+  content: string;
+  publishDate: string;
+  isActive?: boolean;
+  displayOrder?: number;
+  attachments: NoticeAttachment[];
+};

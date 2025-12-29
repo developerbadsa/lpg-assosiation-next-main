@@ -1,19 +1,13 @@
-import type { CreateNoticeInput, NoticeApiItem, NoticeRow } from './types';
+import type { NoticeAttachment, NoticeDetails, NoticeRow } from './types';
 
 const LARAVEL_ORIGIN =
   process.env.NEXT_PUBLIC_LARAVEL_ORIGIN ?? 'https://admin.petroleumstationbd.com';
 
 function toAbsoluteUrl(pathOrUrl: string | null | undefined) {
-  if (!pathOrUrl) return null;
+  if (!pathOrUrl) return '';
   if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
   const p = pathOrUrl.startsWith('/') ? pathOrUrl : `/${pathOrUrl}`;
   return `${LARAVEL_ORIGIN}${p}`;
-}
-
-function normalizeList(raw: any): NoticeApiItem[] {
-  if (Array.isArray(raw)) return raw as NoticeApiItem[];
-  if (Array.isArray(raw?.data)) return raw.data as NoticeApiItem[];
-  return [];
 }
 
 async function readJsonOrThrow(res: Response) {
@@ -22,43 +16,75 @@ async function readJsonOrThrow(res: Response) {
   return data;
 }
 
-function formatPublishDate(api: NoticeApiItem) {
-  const v = api.publish_date ?? api.created_at ?? api.updated_at ?? '';
+function normalizeList(raw: any) {
+  if (Array.isArray(raw)) return raw;
+  if (Array.isArray(raw?.data)) return raw.data;
+  return [];
+}
+
+function pickDate(v?: string | null) {
   if (!v) return '';
-  if (typeof v === 'string' && v.includes('T')) return v.split('T')[0];
-  return String(v);
+  const s = String(v);
+  const m = s.match(/^(\d{4}-\d{2}-\d{2})/);
+  return m ? m[1] : s;
 }
 
-function firstAttachmentHref(api: NoticeApiItem) {
-  const atts = api.attachments ?? [];
-  if (!Array.isArray(atts) || atts.length === 0) return undefined;
+/**
+ * Supports:
+ * - Your actual details response:
+ *   attachments: [{ file_url, original_name, file_type, file_size, id }]
+ * - fallback old shapes (strings / url/path)
+ */
+function normalizeAttachments(raw: any): NoticeAttachment[] {
+  if (!raw) return [];
 
-  const first = atts[0];
-  if (typeof first === 'string') return toAbsoluteUrl(first) ?? undefined;
+  // Best case: objects like your response
+  if (Array.isArray(raw) && raw.length && typeof raw[0] === 'object') {
+    return raw
+      .map((a: any, i: number) => {
+        const fileUrl = a?.file_url ?? a?.url ?? a?.path ?? a?.file ?? '';
+        if (!fileUrl) return null;
 
-  const url = first?.url ?? first?.path ?? first?.file;
-  return toAbsoluteUrl(url ?? null) ?? undefined;
-}
+        const name =
+          a?.original_name ??
+          a?.name ??
+          `Attachment ${i + 1}`;
 
-function buildNoticeFormData(input: CreateNoticeInput) {
-  const fd = new FormData();
-
-  fd.set('title', input.title);
-  fd.set('content', input.content);
-
-  // Keep both supported: older doc => audience, newer doc => publish_date
-  fd.set('audience', input.audience);
-
-  if (input.publishDate?.trim()) {
-    fd.set('publish_date', input.publishDate.trim());
+        return {
+          id: a?.id ?? `${i + 1}`,
+          name: String(name),
+          url: toAbsoluteUrl(String(fileUrl)),
+          fileType: a?.file_type ?? null,
+          fileSize: typeof a?.file_size === 'number' ? a.file_size : null,
+        } satisfies NoticeAttachment;
+      })
+      .filter(Boolean) as NoticeAttachment[];
   }
 
-  for (const f of input.attachments ?? []) {
-    fd.append('attachments[]', f);
+  // String array fallback: ["path1", "path2"]
+  if (Array.isArray(raw) && raw.every((x) => typeof x === 'string')) {
+    return raw.map((p: string, i: number) => ({
+      id: `${i + 1}`,
+      name: `Attachment ${i + 1}`,
+      url: toAbsoluteUrl(p),
+      fileType: null,
+      fileSize: null,
+    }));
   }
 
-  return fd;
+  // {data:[...]} fallback
+  if (Array.isArray(raw?.data)) return normalizeAttachments(raw.data);
+
+  return [];
 }
+
+export type CreateNoticeInput = {
+  title: string;
+  content: string;
+  audience: string;
+  publishDate?: string;
+  attachments: File[];
+};
 
 export const noticesRepo = {
   async list(): Promise<NoticeRow[]> {
@@ -66,28 +92,56 @@ export const noticesRepo = {
     const raw = await readJsonOrThrow(res);
     const list = normalizeList(raw);
 
-    return list.map((n, idx) => ({
+    return list.map((n: any, idx: number) => ({
       id: String(n.id),
       sl: idx + 1,
-      title: n.title,
-      publishDate: formatPublishDate(n),
-      href: firstAttachmentHref(n),
+      title: n.title ?? '',
+      publishDate: pickDate(n.publish_date ?? n.created_at ?? ''),
     }));
   },
 
-  async create(input: CreateNoticeInput) {
-    const fd = buildNoticeFormData(input);
-
-    const res = await fetch('/api/notices', {
-      method: 'POST',
-      body: fd,
+  async getDetails(id: string): Promise<NoticeDetails> {
+    const res = await fetch(`/api/notices/${encodeURIComponent(id)}`, {
+      cache: 'no-store',
     });
+    const raw = await readJsonOrThrow(res);
 
+    // your API returns the object directly (not {data:...})
+    const n = (raw?.data ?? raw) as any;
+
+    return {
+      id: String(n.id),
+      title: n.title ?? '',
+      slug: n.slug ?? '',
+      content: n.content ?? '',
+      publishDate: pickDate(n.publish_date ?? n.created_at ?? ''),
+      isActive: typeof n.is_active === 'boolean' ? n.is_active : Boolean(n.is_active),
+      displayOrder: typeof n.display_order === 'number' ? n.display_order : Number(n.display_order ?? 0),
+      attachments: normalizeAttachments(n.attachments),
+    };
+  },
+
+  async create(input: CreateNoticeInput) {
+    const fd = new FormData();
+    fd.set('title', input.title);
+    fd.set('content', input.content);
+    fd.set('audience', input.audience);
+
+    if (input.publishDate) fd.set('publish_date', input.publishDate);
+
+    for (const f of input.attachments) {
+      // Laravel expects attachments[]
+      fd.append('attachments[]', f);
+    }
+
+    const res = await fetch('/api/notices', { method: 'POST', body: fd });
     return readJsonOrThrow(res);
   },
 
   async remove(id: string): Promise<void> {
-    const res = await fetch(`/api/notices/${id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/notices/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
     await readJsonOrThrow(res);
   },
 };

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
@@ -9,11 +8,15 @@ import type { ColumnDef } from '@/components/ui/table-panel/types';
 
 import { useDeleteNotice, useNoticesList } from './queries';
 import type { NoticeRow } from './types';
+import NoticeDetailsModal from './NoticeViewModal';
 import AddNoticeModal from './AddNoticeModal';
 
 export default function NoticesOverviewSection() {
   const { data = [], isLoading } = useNoticesList();
   const del = useDeleteNotice();
+
+  const [viewOpen, setViewOpen] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const [addOpen, setAddOpen] = useState(false);
 
@@ -39,18 +42,7 @@ export default function NoticesOverviewSection() {
         csvValue: (r) => r.title,
         cell: (r) => (
           <div className="max-w-[520px]">
-            {r.href ? (
-              <Link
-                href={r.href}
-                className="text-[11px] font-medium text-[#2B69C7] hover:underline"
-              >
-                {r.title}
-              </Link>
-            ) : (
-              <span className="text-[11px] font-medium text-[#2B69C7]">
-                {r.title}
-              </span>
-            )}
+            <span className="text-[11px] font-medium text-[#2B69C7]">{r.title}</span>
           </div>
         ),
       },
@@ -63,9 +55,7 @@ export default function NoticesOverviewSection() {
         csvValue: (r) => r.publishDate,
         headerClassName: 'w-[150px]',
         minWidth: 150,
-        cell: (r) => (
-          <span className="text-[11px] text-[#2B3A4A]">{r.publishDate}</span>
-        ),
+        cell: (r) => <span className="text-[11px] text-[#2B3A4A]">{r.publishDate}</span>,
       },
       {
         id: 'view',
@@ -76,12 +66,16 @@ export default function NoticesOverviewSection() {
         headerClassName: 'w-[120px]',
         minWidth: 120,
         cell: (r) => (
-          <Link
-            href={r.href ?? '#'}
+          <button
+            type="button"
+            onClick={() => {
+              setActiveId(r.id);
+              setViewOpen(true);
+            }}
             className="inline-flex h-6 items-center justify-center rounded-[3px] bg-[#12306B] px-4 text-[10px] font-semibold text-white"
           >
             View
-          </Link>
+          </button>
         ),
       },
       {
@@ -108,9 +102,7 @@ export default function NoticesOverviewSection() {
 
   return (
     <section className="min-w-0">
-      <h2 className="text-center text-[14px] font-semibold text-[#133374]">
-        Overview of Notices
-      </h2>
+      <h2 className="text-center text-[14px] font-semibold text-[#133374]">Overview of Notices</h2>
 
       <div className="mt-4 flex items-center justify-end">
         <button
@@ -139,7 +131,16 @@ export default function NoticesOverviewSection() {
         />
       </div>
 
-      <AddNoticeModal open={addOpen} onClose={() => setAddOpen(false)} />
+      <NoticeDetailsModal
+        open={viewOpen}
+        noticeId={activeId}
+        onClose={() => setViewOpen(false)}
+      />
+
+      <AddNoticeModal
+        open={addOpen}
+        onClose={() => setAddOpen(false)}
+      />
     </section>
   );
 }
