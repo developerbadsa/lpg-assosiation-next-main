@@ -112,7 +112,7 @@ export default function UserManagementSection() {
 
                   <button
                      type='button'
-                     onClick={() => delM.mutate(r.id)}
+                     onClick={() => delM.mutate(Number(r.id))}
                      className='flex items-center gap-2 hover:text-[#5E6A74]'
                      disabled={delM.isPending}>
                      <span className='inline-flex h-5 w-5 items-center justify-center rounded-full bg-black/40 text-[12px] text-white'>

@@ -16,7 +16,7 @@ export type CommitteeApiItem = {
 };
 
 export type CommitteeRow = {
-  id: string;
+  id: string | number;
 
   fullName: string;
   designation: string;
