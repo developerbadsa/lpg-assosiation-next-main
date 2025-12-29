@@ -1,22 +1,19 @@
-import type { UserRole } from './types';
+type Ui = { cls: string };
 
-const roleUi: Record<UserRole, { label: string; cls: string }> = {
-  MANAGER: {
-    label: 'Manager',
-    cls: 'bg-[#F6C34A] text-[#1B2A41]',
-  },
-  ADMIN: {
-    label: 'Admin',
-    cls: 'bg-[#0B2B3A] text-white',
-  },
-  AUTHOR: {
-    label: 'Author',
-    cls: 'bg-[#0B8F6B] text-white',
-  },
-};
+function uiFor(role: string): Ui {
+  const v = role.trim();
 
-export default function RolePill({ role }: { role: UserRole }) {
-  const ui = roleUi[role];
+  if (v === 'Active') return { cls: 'bg-[#0B8F6B] text-white' };
+  if (v === 'Inactive') return { cls: 'bg-[#F6C34A] text-[#1B2A41]' };
+
+  if (v.startsWith('Order:')) return { cls: 'bg-[#0B2B3A] text-white' };
+
+  // Default pill style for position_name etc.
+  return { cls: 'bg-[#E8F3EC] text-[#1B2A41]' };
+}
+
+export default function RolePill({ role }: { role: string }) {
+  const ui = uiFor(role);
 
   return (
     <span
@@ -25,7 +22,7 @@ export default function RolePill({ role }: { role: UserRole }) {
         ui.cls,
       ].join(' ')}
     >
-      {ui.label}
+      {role}
     </span>
   );
 }
