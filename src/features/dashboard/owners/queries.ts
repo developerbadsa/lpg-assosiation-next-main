@@ -1,16 +1,21 @@
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {ownersRepo} from './repo';
+'use client';
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ownersRepo } from './repo';
+import type { UpdateOwnerInput } from './types';
+
+const KEY = ['owners'] as const;
 
 export function useUnverifiedOwners() {
   return useQuery({
-    queryKey: ['owners', 'unverified'],
+    queryKey: [...KEY, 'unverified'],
     queryFn: () => ownersRepo.listUnverified(),
   });
 }
 
 export function useVerifiedOwners() {
   return useQuery({
-    queryKey: ['owners', 'verified'],
+    queryKey: [...KEY, 'verified'],
     queryFn: () => ownersRepo.listVerified(),
   });
 }
@@ -20,7 +25,7 @@ export function useApproveOwner() {
   return useMutation({
     mutationFn: (id: string) => ownersRepo.approve(id),
     onSuccess: async () => {
-      await qc.invalidateQueries({queryKey: ['owners']});
+      await qc.invalidateQueries({ queryKey: KEY });
     },
   });
 }
@@ -30,7 +35,17 @@ export function useRejectOwner() {
   return useMutation({
     mutationFn: (id: string) => ownersRepo.reject(id),
     onSuccess: async () => {
-      await qc.invalidateQueries({queryKey: ['owners']});
+      await qc.invalidateQueries({ queryKey: KEY });
+    },
+  });
+}
+
+export function useUpdateOwner() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars: { id: string; input: UpdateOwnerInput }) => ownersRepo.update(vars.id, vars.input),
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: KEY });
     },
   });
 }

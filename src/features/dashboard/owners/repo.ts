@@ -1,67 +1,173 @@
-import {env} from '@/lib/env';
-import {mockDelay} from '@/lib/mockDelay';
-import {MOCK_OWNERS} from './mock';
-import type {OwnerRow} from './types';
-import { RegisterOwnerInput } from './register-owner/types';
+import type { OwnerRow, OwnerStatus, UpdateOwnerInput } from './types';
+import type { RegisterOwnerInput } from './register-owner/types';
+
+export type RegisterOwnerResult = { id: string };
 
 export type OwnersRepo = {
-  registerOwner(input: RegisterOwnerInput): Promise<unknown>;
-  listUnverified: () => Promise<OwnerRow[]>;
-  listVerified: () => Promise<OwnerRow[]>;
-  approve: (id: string) => Promise<void>;
-  reject: (id: string) => Promise<void>;
-  addSection: (id: string) => Promise<void>;
+  registerOwner(input: RegisterOwnerInput): Promise<RegisterOwnerResult>;
+  listUnverified(): Promise<OwnerRow[]>;
+  listVerified(): Promise<OwnerRow[]>;
+  approve(id: string): Promise<void>;
+  reject(id: string): Promise<void>;
+  update(id: string, input: UpdateOwnerInput): Promise<void>;
+  addSection(id: string): Promise<void>;
 };
 
-// In-memory store for mock mode
-let store: OwnerRow[] = structuredClone(MOCK_OWNERS);
+type ApiOwnerRow = {
+  id: number | string;
+  full_name: string;
+  email: string;
+  phone_number: string;
+  address: string;
+  profile_image: string | null;
 
-const mockOwnersRepo: OwnersRepo = {
+  // IMPORTANT: backend enum appears NOT to accept "VERIFIED"
+  // observed: "PENDING" exists; approve should use "APPROVED"
+  verification_status: string; // PENDING | APPROVED | REJECTED (likely)
+  rejection_reason: string | null;
+};
+
+async function apiJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(path, {
+    ...init,
+    headers: {
+      Accept: 'application/json',
+      ...(init?.body && !(init.body instanceof FormData) ? { 'Content-Type': 'application/json' } : {}),
+      ...(init?.headers ?? {}),
+    },
+    cache: 'no-store',
+  });
+
+  const data = await res.json().catch(() => null);
+
+  if (!res.ok) {
+    const err: any = new Error(data?.message ?? res.statusText ?? 'Request failed');
+    err.status = res.status;
+    err.errors = data?.errors;
+    throw err;
+  }
+
+  return data as T;
+}
+
+const DEFAULT_AVATAR =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96">
+    <rect width="96" height="96" rx="18" fill="#F1F3F6"/>
+    <circle cx="48" cy="40" r="16" fill="#CBD5E1"/>
+    <path d="M20 84c6-16 20-24 28-24s22 8 28 24" fill="#CBD5E1"/>
+  </svg>
+`);
+
+function origin() {
+  return process.env.NEXT_PUBLIC_LARAVEL_ORIGIN ?? 'https://admin.petroleumstationbd.com';
+}
+
+function toAbs(pathOrUrl?: string | null) {
+  if (!pathOrUrl) return '';
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+  const p = pathOrUrl.startsWith('/') ? pathOrUrl : `/${pathOrUrl}`;
+  return `${origin().replace(/\/+$/, '')}${p}`;
+}
+
+// Accept common backend variants
+function mapStatus(apiStatus: string): OwnerStatus {
+  const s = (apiStatus ?? '').toUpperCase();
+
+  // treat APPROVED/VERIFIED as "VERIFIED" in UI
+  if (s === 'APPROVED' || s === 'VERIFIED') return 'VERIFIED';
+
+  if (s === 'REJECTED') return 'REJECTED';
+
+  // treat PENDING as UNVERIFIED
+  return 'UNVERIFIED';
+}
+
+function mapOwner(r: ApiOwnerRow): OwnerRow {
+  return {
+    id: String(r.id),
+    memberId: undefined,
+    photoUrl: r.profile_image ? toAbs(r.profile_image) : DEFAULT_AVATAR,
+    ownerName: r.full_name,
+    phone: r.phone_number,
+    email: r.email,
+    address: r.address ?? '',
+    status: mapStatus(r.verification_status),
+  };
+}
+
+// UI -> backend mapping (THIS is the fix)
+function uiToApiStatus(s: OwnerStatus) {
+  switch (s) {
+    case 'UNVERIFIED':
+      return 'PENDING';
+    case 'VERIFIED':
+      return 'APPROVED'; //  backend-safe approve value
+    case 'REJECTED':
+      return 'REJECTED';
+    default:
+      return 'PENDING';
+  }
+}
+
+export const ownersRepo: OwnersRepo = {
+  async registerOwner(input) {
+    const data = await apiJson<any>('/api/station-owners/register', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+
+    const id = String(data?.id ?? data?.owner?.id ?? data?.station_owner?.id ?? '');
+    if (!id) throw new Error('Registration succeeded but id missing');
+
+    return { id };
+  },
+
   async listUnverified() {
-    await mockDelay(250);
-    return store.filter((o) => o.status === 'UNVERIFIED').map((o) => ({ ...o }));
+    const rows = await apiJson<ApiOwnerRow[]>('/api/station-owners');
+    return rows.map(mapOwner).filter((o) => o.status === 'UNVERIFIED');
   },
+
   async listVerified() {
-    await mockDelay(250);
-    return store.filter((o) => o.status === 'VERIFIED').map((o) => ({ ...o }));
+    const rows = await apiJson<ApiOwnerRow[]>('/api/station-owners');
+    return rows.map(mapOwner).filter((o) => o.status === 'VERIFIED');
   },
+
   async approve(id) {
-    await mockDelay(300);
-    store = store.map((o) => (o.id === id ? { ...o, status: 'VERIFIED' } : o));
+    //  send APPROVED (not VERIFIED)
+    await apiJson(`/api/station-owners/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ verification_status: 'APPROVED', rejection_reason: null }),
+    });
   },
+
   async reject(id) {
-    await mockDelay(300);
-    // For mock: just remove it from the list
-    store = store.filter((o) => o.id !== id);
+    await apiJson(`/api/station-owners/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        verification_status: 'REJECTED',
+        rejection_reason: 'Rejected by admin',
+      }),
+    });
   },
-  async addSection() {
-    await mockDelay(250);
-    // Placeholder: later this can open a modal or navigate to a document/section page.
-  },
-  registerOwner: function (input: RegisterOwnerInput): Promise<unknown> {
-    throw new Error('Function not implemented.');
-  }
-};
 
-const apiOwnersRepo: OwnersRepo = {
-  async listUnverified() {
-    throw new Error('API repo not implemented yet');
-  },
-  async listVerified() {
-    throw new Error('API repo not implemented yet');
-  },
-  async approve() {
-    throw new Error('API repo not implemented yet');
-  },
-  async reject() {
-    throw new Error('API repo not implemented yet');
-  },
-  async addSection() {
-    throw new Error('API repo not implemented yet');
-  },
-  registerOwner: function (input: RegisterOwnerInput): Promise<unknown> {
-    throw new Error('Function not implemented.');
-  }
-};
+  async update(id, input) {
+    const payload: any = {};
 
-export const ownersRepo = env.dataMode === 'mock' ? mockOwnersRepo : apiOwnersRepo;
+    if (input.address !== undefined) payload.address = input.address;
+
+    if (input.status) payload.verification_status = uiToApiStatus(input.status);
+
+    if (input.rejectionReason !== undefined)
+      payload.rejection_reason = input.rejectionReason?.trim() || null;
+
+    await apiJson(`/api/station-owners/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async addSection(_id) {
+  },
+};

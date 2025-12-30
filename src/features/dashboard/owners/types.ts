@@ -1,12 +1,18 @@
-export type OwnerStatus = 'UNVERIFIED' | 'VERIFIED';
+export type OwnerStatus = 'UNVERIFIED' | 'VERIFIED' | 'REJECTED';
 
 export type OwnerRow = {
   id: string;
-  memberId?: string; // optional (some designs show it)
+  memberId?: string;
   photoUrl: string;
   ownerName: string;
   phone: string;
   email?: string;
   address: string;
   status: OwnerStatus;
+};
+
+export type UpdateOwnerInput = {
+  address?: string;
+  status?: OwnerStatus;
+  rejectionReason?: string;
 };

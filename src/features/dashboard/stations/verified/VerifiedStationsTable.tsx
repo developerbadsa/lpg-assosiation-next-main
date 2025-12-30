@@ -1,4 +1,4 @@
-// src/features/stations/verified/VerifiedStationsTable.tsx
+
 'use client';
 
 import { useCallback, useMemo } from 'react';
@@ -252,8 +252,7 @@ export default function VerifiedStationsTable() {
         <button
           type="button"
           onClick={() => exportRowsToCsv(rows, columns, 'verified-stations-all.csv')}
-          className="inline-flex h-[46px] w-[270px] items-center justify-center gap-3 rounded-[10px] bg-[#009970] px-6 text-[18px] font-medium text-white shadow-sm transition hover:brightness-110 active:brightness-95"
-        >
+           className='inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#009970] px-8 text-[13px] font-semibold text-white shadow-sm hover:brightness-110 active:brightness-95'>
           <Database size={20} className="text-white" />
           Export All Data
         </button>

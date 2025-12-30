@@ -1,37 +1,29 @@
-import {env} from '@/lib/env';
-import type {RegisterOwnerInput, RegisterOwnerResult} from './types';
+import type { RegisterOwnerInput, RegisterOwnerResult } from './types';
 
-export type OwnersRepo = {
-  registerOwner: (input: RegisterOwnerInput) => Promise<RegisterOwnerResult>;
-};
-
-function sleep(ms: number) {
-  return new Promise((r) => setTimeout(r, ms));
+async function readJsonOrThrow(res: Response) {
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    const msg =
+      data?.message ||
+      (data?.errors ? Object.values(data.errors).flat().join(' ') : null) ||
+      res.statusText ||
+      'Request failed';
+    throw new Error(msg);
+  }
+  return data;
 }
 
-const mockOwnersRepo: OwnersRepo = {
-  async registerOwner(input) {
-    // Mock latency to simulate server
-    await sleep(650);
+export async function registerOwnerRepo(input: RegisterOwnerInput): Promise<RegisterOwnerResult> {
+  const res = await fetch('/api/station-owners/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(input),
+  });
 
-    // In real API, you’ll return server id.
-    // For now, generate a stable mock id
-    const id = `own_${Math.random().toString(16).slice(2)}_${Date.now()}`;
+  const data = await readJsonOrThrow(res);
 
-    // You can later push into in-memory mock list if you want
-    // so it appears instantly in Unverified list.
-    void input;
+  const ownerId =
+    data?.station_owner?.id ?? data?.station_owner?.data?.id ?? data?.station_owner?.station_owner?.id;
 
-    return {id};
-  },
-};
-
-const apiOwnersRepo: OwnersRepo = {
-  async registerOwner(_input) {
-    // Later: call your real endpoint
-    // return api.post('/owners', input)
-    throw new Error('API mode not implemented yet');
-  },
-};
-
-export const ownersRepo: OwnersRepo = env.dataMode === 'api' ? apiOwnersRepo : mockOwnersRepo;
+  return { id: String(ownerId ?? data?.user?.id ?? '') };
+}

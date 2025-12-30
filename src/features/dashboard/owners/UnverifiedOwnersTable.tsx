@@ -1,11 +1,12 @@
 'use client';
 
-import {useMemo} from 'react';
+import { useMemo, useState } from 'react';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
-import type {ColumnDef} from '@/components/ui/table-panel/types';
-import {BadgeCheck, Pencil, Plus, Trash2} from 'lucide-react';
-import type {OwnerRow} from './types';
-import {useAddSection, useApproveOwner, useRejectOwner, useUnverifiedOwners} from './queries';
+import type { ColumnDef } from '@/components/ui/table-panel/types';
+import { BadgeCheck, Pencil, Plus, Trash2 } from 'lucide-react';
+import type { OwnerRow } from './types';
+import { useAddSection, useApproveOwner, useRejectOwner, useUnverifiedOwners, useUpdateOwner } from './queries';
+import EditOwnerModal from './EditOwnerModal';
 
 function cx(...v: Array<string | false | null | undefined>) {
   return v.filter(Boolean).join(' ');
@@ -31,11 +32,7 @@ function ActionDot({
       aria-label={title}
       onClick={onClick}
       disabled={disabled}
-      className={cx(
-        'grid h-6 w-6 place-items-center rounded-full shadow-sm',
-        'disabled:opacity-60',
-        bg
-      )}
+      className={cx('grid h-6 w-6 place-items-center rounded-full shadow-sm', 'disabled:opacity-60', bg)}
     >
       {children}
     </button>
@@ -45,15 +42,19 @@ function ActionDot({
 export default function UnverifiedOwnersTable() {
   const q = useUnverifiedOwners();
   const approveM = useApproveOwner();
-  const rejectM = useRejectOwner(); // use this as "delete" for now
+  const rejectM = useRejectOwner();
   const addSectionM = useAddSection();
+  const updateM = useUpdateOwner();
 
-  const busy = approveM.isPending || rejectM.isPending || addSectionM.isPending;
+  const [editOpen, setEditOpen] = useState(false);
+  const [active, setActive] = useState<OwnerRow | null>(null);
+
+  const busy = approveM.isPending || rejectM.isPending || addSectionM.isPending || updateM.isPending;
 
   const columns = useMemo<ColumnDef<OwnerRow>[]>(() => {
-    const onEdit = (id: string) => {
-      // Later: route to edit screen/modal
-      console.log('Edit owner:', id);
+    const onEdit = (row: OwnerRow) => {
+      setActive(row);
+      setEditOpen(true);
     };
 
     return [
@@ -69,11 +70,7 @@ export default function UnverifiedOwnersTable() {
           <div className="flex justify-center">
             <div className="h-14 w-14 rounded-[14px] bg-[#F1F3F6] p-1">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={r.photoUrl}
-                alt={r.ownerName}
-                className="h-full w-full rounded-[12px] object-cover"
-              />
+              <img src={r.photoUrl} alt={r.ownerName} className="h-full w-full rounded-[12px] object-cover" />
             </div>
           </div>
         ),
@@ -114,9 +111,7 @@ export default function UnverifiedOwnersTable() {
         headerClassName: 'w-[340px]',
         csvHeader: 'Address',
         csvValue: (r) => r.address,
-        cell: (r) => (
-          <span className="text-[#133374] whitespace-pre-line">{r.address}</span>
-        ),
+        cell: (r) => <span className="text-[#133374] whitespace-pre-line">{r.address}</span>,
       },
       {
         id: 'addSection',
@@ -149,30 +144,15 @@ export default function UnverifiedOwnersTable() {
         csvValue: () => '',
         cell: (r) => (
           <div className="flex items-center justify-center gap-2">
-            <ActionDot
-              title="Approve"
-              onClick={() => approveM.mutate(r.id)}
-              disabled={busy}
-              bg="bg-[#22C55E] text-white"
-            >
+            <ActionDot title="Approve" onClick={() => approveM.mutate(r.id)} disabled={busy} bg="bg-[#22C55E] text-white">
               <BadgeCheck size={16} />
             </ActionDot>
 
-            <ActionDot
-              title="Delete"
-              onClick={() => rejectM.mutate(r.id)}
-              disabled={busy}
-              bg="bg-[#EF4444] text-white"
-            >
+            <ActionDot title="Delete" onClick={() => rejectM.mutate(r.id)} disabled={busy} bg="bg-[#EF4444] text-white">
               <Trash2 size={14} />
             </ActionDot>
 
-            <ActionDot
-              title="Edit"
-              onClick={() => onEdit(r.id)}
-              disabled={busy}
-              bg="bg-[#F59E0B] text-white"
-            >
+            <ActionDot title="Edit" onClick={() => onEdit(r)} disabled={busy} bg="bg-[#F59E0B] text-white">
               <Pencil size={14} />
             </ActionDot>
           </div>
@@ -186,20 +166,39 @@ export default function UnverifiedOwnersTable() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-center text-[16px] font-semibold text-[#2B3A4A]">
-        Unverified Owner
-      </h2>
+      <h2 className="text-center text-[16px] font-semibold text-[#2B3A4A]">Unverified Owner</h2>
 
       <TablePanel<OwnerRow>
         rows={q.data ?? []}
         columns={columns}
         getRowKey={(r) => r.id}
-        searchText={(r) =>
-          `${r.ownerName} ${r.phone} ${r.email ?? ''} ${r.address}`
-        }
+        searchText={(r) => `${r.ownerName} ${r.phone} ${r.email ?? ''} ${r.address}`}
         showTopBar={false}
         showExport={false}
         exportFileName=""
+      />
+
+      <EditOwnerModal
+        open={editOpen}
+        owner={active}
+        busy={updateM.isPending}
+        onClose={() => {
+          setEditOpen(false);
+          setActive(null);
+        }}
+        onSave={(input) => {
+          if (!active) return;
+          updateM.mutate({
+            id: active.id,
+            input: {
+              address: input.address,
+              status: input.status,
+              rejectionReason: input.rejectionReason,
+            },
+          });
+          setEditOpen(false);
+          setActive(null);
+        }}
       />
     </div>
   );
