@@ -86,14 +86,13 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
 
    const clearCloseTimer = useCallback(() => {
       if (closeTimerRef.current) {
-         window.clearTimeout(closeTimerRef.current);
+         clearTimeout(closeTimerRef.current);
          closeTimerRef.current = null;
       }
    }, []);
-
    const scheduleCloseDropdowns = useCallback(() => {
       clearCloseTimer();
-      closeTimerRef.current = window.setTimeout(() => {
+      closeTimerRef.current = setTimeout(() => {
          setOpenDropdownKey(null);
       }, 180);
    }, [clearCloseTimer]);
