@@ -15,6 +15,7 @@ import {
 
 import {useDashboardStats} from './queries';
 import {useAuth} from '@/features/auth/AuthProvider';
+import Loader from '@/components/shared/Loader';
 
 export default function DashboardOverviewSection() {
   const statsQ = useDashboardStats();
@@ -22,7 +23,7 @@ export default function DashboardOverviewSection() {
 
 
   if (authLoading || statsQ.isLoading) {
-    return <div className="text-sm text-slate-600">Loading...</div>;
+    return <Loader label="Loading..." />;
   }
 
   if (!user) {

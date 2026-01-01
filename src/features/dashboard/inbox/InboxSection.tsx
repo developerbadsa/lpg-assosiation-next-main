@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { MessageCircle } from 'lucide-react';
+import Loader from '@/components/shared/Loader';
 
 import ReplyModal from './ReplyModal';
 import { useInboxMessages, useSendReply, useTrashMessage } from './queries';
@@ -166,8 +167,8 @@ export default function InboxSection() {
 
         <div className="mt-8 w-full rounded-[12px] bg-[#FAFBFF] px-10 py-4">
           {q.isLoading ? (
-            <div className="py-10 text-center text-[12px]" style={{ color: TEXT_MUTED }}>
-              Loading messages...
+            <div className="py-10">
+              <Loader label="Loading messages..." />
             </div>
           ) : null}
 

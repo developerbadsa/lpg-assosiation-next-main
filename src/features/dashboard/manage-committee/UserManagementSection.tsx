@@ -3,6 +3,7 @@
 import {useMemo, useState} from 'react';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type {ColumnDef} from '@/components/ui/table-panel/types';
+import Loader from '@/components/shared/Loader';
 import AddCommitteeModal from './AddCommitteeModal';
 import {useCommitteeMembers, useDeleteCommitteeMember} from './queries';
 import type {CommitteeRow} from './types';
@@ -155,8 +156,8 @@ export default function UserManagementSection() {
             />
 
             {q.isLoading ? (
-               <div className='pt-3 text-center text-[12px] text-[#7B8EA3]'>
-                  Loading...
+               <div className='pt-3'>
+                  <Loader label='Loading...' size='sm' />
                </div>
             ) : null}
 

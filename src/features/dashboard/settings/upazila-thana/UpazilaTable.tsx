@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type { ColumnDef } from '@/components/ui/table-panel/types';
 import Modal from '@/components/ui/modal/Modal';
+import Loader from '@/components/shared/Loader';
 
 import type { UpazilaRow } from './types';
 import { useCreateUpazila, useDeleteUpazila, useUpazilas, useUpdateUpazila } from './queries';
@@ -159,7 +160,7 @@ export default function UpazilaTable() {
     ];
   }, [del]);
 
-  if (q.isLoading) return <div className="text-sm text-slate-600">Loading...</div>;
+  if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load upazilas.</div>;
 
   return (
