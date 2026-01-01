@@ -1010,7 +1010,7 @@ function AdvisorCard({advisor}: {advisor: Advisor}) {
       <div className='rounded-[18px] bg-white p-4 shadow-[0_18px_45px_rgba(0,0,0,0.10)]'>
          <div className='relative overflow-hidden rounded-[14px] bg-white'>
             {/* image */}
-            <div className='relative h-[800px] w-full'>
+            <div className='relative h-[500px] w-full'>
                <Image
                   src={advisor.photo}
                   alt={advisor.name}
