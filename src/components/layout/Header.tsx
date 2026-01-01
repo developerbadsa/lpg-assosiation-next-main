@@ -39,6 +39,11 @@ const MAIN_NAV: NavItem[] = [
       ],
    },
    {
+      key: 'news-feed',
+      label: 'News feed',
+      href: 'news-feed',
+   },
+   {
       key: 'stations',
       label: 'MEMBER STATIONS',
       href: '#',

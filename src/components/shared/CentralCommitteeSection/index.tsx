@@ -148,7 +148,7 @@ export default function CentralCommitteeSection() {
                subtitle='The current committee has been formed in a general meeting held on 27 February, 2021. About 200 owners of autogas stations and conversion workshops were present at the meeting chaired by Engr. Mohammad Serajul Mawla. The panel of Engr. Mohammad Serajul Mawla and SMT Energy Ltd. was elected to the present committee. The following panel members are playing important roles in promoting LPG Autogas and LPG Conversion Center across the country as the General Secretary of this association.'
             />
 
-            <div className='mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            <div className='mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center'>
                {committeeMembers.map(member => (
                   <CommitteeMemberCard key={member.id} member={member} />
                ))}

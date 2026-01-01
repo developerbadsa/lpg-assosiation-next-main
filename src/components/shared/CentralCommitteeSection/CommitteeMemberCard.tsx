@@ -32,7 +32,7 @@ export default function CommitteeMemberCard({
         rounded-[20px]  w-full max-w-[300px]
         bg-gradient-to-b from-[#FBFEFF] via-[#F7FAFF] to-[#ECF3FF]
         px-7 pb-8 pt-12
-        shadow-[0_18px_40px_rgba(22,101,175,0.14)] min-h-[440px] md:min-h-[500px]
+        shadow-[0_18px_40px_rgba(22,101,175,0.14)] min-h-[340px] md:min-h-[400px]
       "
     >
       {/* role */}
@@ -62,7 +62,7 @@ export default function CommitteeMemberCard({
       </div>
 
       {/* name + description */}
-      <div className="mt-6 text-center min-h-[220px] overflow-hidden flex flex-col justify-evenly md:min-h-[270px]">
+      <div className="mt-6 text-center min-h-[90px] overflow-hidden flex flex-col justify-evenly md:min-h-[100px]">
         <h3 className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[#153976]">
           {member.name}
         </h3>
