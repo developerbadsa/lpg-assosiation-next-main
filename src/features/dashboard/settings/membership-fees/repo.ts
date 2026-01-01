@@ -145,5 +145,4 @@ const apiRepo: MembershipFeesRepo = {
   },
 };
 
-export const membershipFeesRepo =
-  env.dataMode === 'mock' ? mockRepo : apiRepo;
+export const membershipFeesRepo = apiRepo;
