@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type { ColumnDef } from '@/components/ui/table-panel/types';
 import { BadgeCheck, Pencil, Plus, Trash2 } from 'lucide-react';
+import Loader from '@/components/shared/Loader';
 import type { OwnerRow } from './types';
 import { useAddSection, useApproveOwner, useRejectOwner, useUnverifiedOwners, useUpdateOwner } from './queries';
 import EditOwnerModal from './EditOwnerModal';
@@ -161,7 +162,7 @@ export default function UnverifiedOwnersTable() {
     ];
   }, [addSectionM, approveM, rejectM, busy]);
 
-  if (q.isLoading) return <div className="text-sm text-slate-600">Loading...</div>;
+  if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load owners.</div>;
 
   return (

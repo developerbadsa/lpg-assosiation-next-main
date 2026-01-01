@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type { ColumnDef } from '@/components/ui/table-panel/types';
+import Loader from '@/components/shared/Loader';
 import type { DistrictRow } from './types';
 import {
   useCreateDistrict,
@@ -100,7 +101,7 @@ export default function DistrictTable() {
     ];
   }, [del.isPending]);
 
-  if (q.isLoading) return <div className="text-sm text-slate-600">Loading...</div>;
+  if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load districts.</div>;
 
   return (

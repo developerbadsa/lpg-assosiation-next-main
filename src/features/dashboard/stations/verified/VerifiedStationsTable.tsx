@@ -9,6 +9,7 @@ import { Database, Eye, Pencil, FileText } from 'lucide-react';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type { ColumnDef } from '@/components/ui/table-panel/types';
 import { exportRowsToCsv } from '@/components/ui/table-panel/exportCsv';
+import Loader from '@/components/shared/Loader';
 
 import type { VerifiedStationRow } from './types';
 import { useVerifiedStations } from './queries';
@@ -231,7 +232,7 @@ export default function VerifiedStationsTable() {
     ];
   }, [goEdit, goView, prefetchDetails]);
 
-  if (q.isLoading) return <div className="text-sm text-slate-600">Loading...</div>;
+  if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load stations.</div>;
 
   const rows = q.data ?? [];

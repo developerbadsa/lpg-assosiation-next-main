@@ -3,6 +3,7 @@
 import {useMemo, useState} from 'react';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type {ColumnDef} from '@/components/ui/table-panel/types';
+import Loader from '@/components/shared/Loader';
 import type {MembershipFeeRow} from './types.ts';
 import {
   useCreateMembershipFee,
@@ -119,7 +120,7 @@ export default function MembershipFeesTable() {
     ];
   }, [del.isPending]);
 
-  if (q.isLoading) return <div className="text-sm text-slate-600">Loading...</div>;
+  if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load fees.</div>;
 
   return (

@@ -3,6 +3,7 @@
 import {useMemo} from 'react';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type {ColumnDef} from '@/components/ui/table-panel/types';
+import Loader from '@/components/shared/Loader';
 import type {InvoiceRow} from './types';
 import {useInvoices} from './queries';
 
@@ -103,7 +104,7 @@ export default function InvoiceTable() {
     ];
   }, []);
 
-  if (q.isLoading) return <div className="text-sm text-slate-600">Loading...</div>;
+  if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load invoices.</div>;
 
   return (

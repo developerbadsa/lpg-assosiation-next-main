@@ -11,6 +11,7 @@ import {
   useUploadAvatar,
 } from './queries';
 import type {ChangePasswordInput, UpdateProfileInput} from './types';
+import Loader from '@/components/shared/Loader';
 
 const BRAND = '#009970';
 
@@ -52,7 +53,7 @@ export default function EditProfileSection() {
     });
   }, [meQ.data, infoForm]);
 
-  if (meQ.isLoading) return <div className="text-sm text-slate-600">Loading...</div>;
+  if (meQ.isLoading) return <Loader label="Loading..." />;
   if (meQ.isError) return <div className="text-sm text-red-600">Failed to load profile.</div>;
 
   const me = meQ.data!;

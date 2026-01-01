@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type { ColumnDef } from '@/components/ui/table-panel/types';
 import { Check, Pencil, Plus, Trash2 } from 'lucide-react';
+import Loader from '@/components/shared/Loader';
 import type { OwnerRow } from './types';
 import { useVerifiedOwners, useRejectOwner, useUpdateOwner } from './queries';
 import EditOwnerModal from './EditOwnerModal';
@@ -169,7 +170,7 @@ export default function VerifiedOwnersTable() {
     ];
   }, [deleteM]);
 
-  if (q.isLoading) return <div className="text-sm text-slate-600">Loading...</div>;
+  if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load owners.</div>;
 
   return (

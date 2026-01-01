@@ -1,6 +1,7 @@
 'use client';
 
 import Modal from '@/components/ui/modal/Modal';
+import Loader from '@/components/shared/Loader';
 import { useNoticeDetails } from './queries';
 
 function cx(...v: Array<string | false | null | undefined>) {
@@ -42,9 +43,7 @@ export default function NoticeDetailsModal({
       maxWidthClassName="max-w-[920px]"
     >
       <div className="p-5">
-        {q.isLoading ? (
-          <div className="text-[12px] text-[#64748B]">Loading...</div>
-        ) : null}
+        {q.isLoading ? <Loader label="Loading..." size="sm" /> : null}
 
         {q.isError ? (
           <div className="rounded-[8px] border border-red-200 bg-red-50 p-3 text-[12px] text-red-700">

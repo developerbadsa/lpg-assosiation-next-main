@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/shared/Loader';
 import { normalizeList } from '@/lib/http/normalize';
 import { toAbsoluteUrl } from '@/lib/http/url';
 
@@ -161,7 +162,7 @@ export default function AlbumImagesSection({ albumId }: { albumId: string }) {
         </div>
       </div>
 
-      {loading ? <div className="text-sm text-slate-600">Loading...</div> : null}
+      {loading ? <Loader label="Loading..." /> : null}
 
       {!loading && gridItems.length === 0 ? (
         <p className="text-center text-[12px] text-[#7B8EA3]">No images found.</p>

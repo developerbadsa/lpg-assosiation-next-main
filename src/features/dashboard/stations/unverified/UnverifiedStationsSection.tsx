@@ -6,6 +6,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type {ColumnDef} from '@/components/ui/table-panel/types';
 import {exportRowsToCsv} from '@/components/ui/table-panel/exportCsv';
+import Loader from '@/components/shared/Loader';
 import {
    Database,
    Eye,
@@ -259,7 +260,7 @@ export default function UnverifiedStationsSection() {
          </h2>
 
          {q.isLoading ? (
-            <div className='text-sm text-slate-600'>Loading...</div>
+            <Loader label='Loading...' />
          ) : q.isError ? (
             <div className='text-sm text-red-600'>Failed to load stations.</div>
          ) : (
