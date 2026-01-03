@@ -11,6 +11,7 @@ import AlbumsHeroSliderSection from '@components/ui/CardSliderwithStack';
 import type {CardSlide} from '@components/ui/CardSliderwithStack';
 import GridCardSection from '@components/shared/GridCardsSection/index';
 import type {AlbumCardData} from '@components/shared/GridCardsSection/Card';
+import Modal from '@/components/ui/modal/Modal';
 
 const BASE_MEDIA_URL = 'https://admin.petroleumstationbd.com';
 const DEFAULT_DESCRIPTION =
@@ -49,6 +50,25 @@ function resolveMediaUrl(path?: string | null) {
    return `${BASE_MEDIA_URL}${path}`;
 }
 
+function toYouTubeEmbedUrl(url?: string | null) {
+   if (!url) return null;
+   try {
+      const parsed = new URL(url);
+      if (parsed.hostname === 'youtu.be') {
+         const id = parsed.pathname.replace('/', '');
+         return id ? `https://www.youtube.com/embed/${id}` : url;
+      }
+      if (parsed.hostname.includes('youtube.com')) {
+         if (parsed.pathname.startsWith('/embed/')) return url;
+         const id = parsed.searchParams.get('v');
+         if (id) return `https://www.youtube.com/embed/${id}`;
+      }
+      return url;
+   } catch {
+      return url;
+   }
+}
+
 function isVideoVisible(video: Video) {
    if (video.is_active === false) return false;
    if (video.type && video.type !== 'gallery') return false;
@@ -79,6 +99,10 @@ const VideoGallery = () => {
    const CARDS_PER_PAGE = 2;
 
    const [sectionCardData, setSectionCardData] = useState<AlbumCardData[]>([]);
+   const [activeVideo, setActiveVideo] = useState<{
+      title: string;
+      url: string;
+   } | null>(null);
 
    useEffect(() => {
       const controller = new AbortController();
@@ -109,6 +133,7 @@ const VideoGallery = () => {
                date: formatDate(video.created_at),
                description: DEFAULT_DESCRIPTION,
                image: resolveMediaUrl(video.thumbnail_url) ?? news1,
+               videoUrl: video.youtube_link,
             }));
 
             setCardSlides([...baseSlides, ...slides]);
@@ -142,7 +167,33 @@ const VideoGallery = () => {
             title='Video Gallery'
             videos={true}
             description={DEFAULT_DESCRIPTION}
+            onPlay={(album) => {
+               if (!album.videoUrl) return;
+               const embedUrl = toYouTubeEmbedUrl(album.videoUrl);
+               if (!embedUrl) return;
+               setActiveVideo({title: album.title, url: embedUrl});
+            }}
          />
+
+         <Modal
+            open={Boolean(activeVideo)}
+            title={activeVideo?.title}
+            onClose={() => setActiveVideo(null)}
+            maxWidthClassName='max-w-[900px]'
+         >
+            <div className='aspect-video w-full bg-black'>
+               {activeVideo ? (
+                  <iframe
+                     key={activeVideo.url}
+                     src={activeVideo.url}
+                     title={activeVideo.title}
+                     allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                     allowFullScreen
+                     className='h-full w-full'
+                  />
+               ) : null}
+            </div>
+         </Modal>
 
          <Footer />
       </main>
