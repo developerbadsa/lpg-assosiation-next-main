@@ -10,7 +10,7 @@ import Image, {type StaticImageData} from 'next/image';
 export type ColSpan = 4 | 5 | 6 | 7 | 8;
 
 export type CardSlide = {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
   images?: Array<StaticImageData | string>;
