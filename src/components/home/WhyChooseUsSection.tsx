@@ -223,19 +223,16 @@ const CONTENT: Record<ContentId, { badge: string; heading: string; body: string 
 };
 
 export default function WhyChooseUsSection() {
-  const [hoveredId, setHoveredId] = useState<PillId | null>(null);
   const [selectedId, setSelectedId] = useState<PillId | null>(null);
 
-  const activeId = hoveredId ?? selectedId;
+  const activeId = selectedId;
 
   const activeContent = useMemo(() => {
     return CONTENT[activeId ?? 'who'];
   }, [activeId]);
 
   const handlePillClick = (id: PillId) => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      setSelectedId(prev => (prev === id ? null : id));
-    }
+    setSelectedId(id);
   };
 
   return (
@@ -283,13 +280,11 @@ export default function WhyChooseUsSection() {
 
           <div className="flex w-full flex-1 gap-3 overflow-x-auto pb-2 lg:min-h-[280px] lg:overflow-visible lg:pb-0 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 snap-x snap-mandatory">
             {PILL_ITEMS.map(pill => {
-              const isActive = (typeof window !== 'undefined' && window.innerWidth < 1024 && selectedId === pill.id) || false;
+              const isActive = selectedId === pill.id;
 
               return (
                 <div
                   key={pill.id}
-                  onMouseEnter={() => setHoveredId(pill.id)}
-                  onMouseLeave={() => setHoveredId(null)}
                   onClick={() => handlePillClick(pill.id)}
                   className={[
                     'relative flex shrink-0 snap-center cursor-pointer items-center justify-center overflow-hidden rounded-[15px]',
