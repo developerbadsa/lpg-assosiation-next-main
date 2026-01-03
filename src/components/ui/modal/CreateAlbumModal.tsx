@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Modal from '@/components/ui/modal/Modal';
-import { require } from './../../../../node_modules/next/dist/compiled/webpack/bundle5';
 
 export default function CreateAlbumModal({
   open,
