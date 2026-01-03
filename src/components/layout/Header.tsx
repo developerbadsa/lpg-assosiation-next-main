@@ -24,7 +24,7 @@ const MAIN_NAV: NavItem[] = [
       children: [
          // { label: 'PHOTO', href: '/gallery/photo' },
          {label: 'PRINT MEDIA', href: '/gallery/print-media-gallery'},
-         {label: 'MEDIA COVERAGE', href: '/gallery/media-coverage'},
+         // {label: 'MEDIA COVERAGE', href: '/gallery/media-coverage'},
          {label: 'VIDEO GALLERY', href: '/gallery/video-gallery'},
       ],
    },

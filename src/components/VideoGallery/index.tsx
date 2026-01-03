@@ -118,14 +118,16 @@ const VideoGallery = () => {
             const data = await res.json().catch(() => null);
             const list = normalizeList(data).filter(isVideoVisible);
 
-            const slides: CardSlide[] = list.map(video => ({
-               id: video.id,
-               title: video.title ?? 'Video Gallery',
-               description: DEFAULT_DESCRIPTION,
-               images: video.thumbnail_url
-                  ? [resolveMediaUrl(video.thumbnail_url)].filter(Boolean)
-                  : undefined,
-            }));
+const slides: CardSlide[] = list.map(video => {
+  const thumb = resolveMediaUrl(video.thumbnail_url);
+
+  return {
+    id: video.id,
+    title: video.title ?? 'Video Gallery',
+    description: DEFAULT_DESCRIPTION,
+    images: thumb ? [thumb] : undefined,
+  };
+});
 
             const cards: AlbumCardData[] = list.map(video => ({
                id: video.id,
