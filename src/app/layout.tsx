@@ -17,6 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
    title: 'LPG Association',
    description: 'LPG Association Website',
+     icons: {
+    icon: '/fav.png',
+    shortcut: '/fav.png',
+    apple: '/fav.png', 
+     }
 };
 
 export const viewport = {
@@ -52,6 +57,7 @@ export default async function RootLayout({
 
    return (
       <html className='' lang='en'>
+         
          <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased  w-full`}>
             <Providers>
