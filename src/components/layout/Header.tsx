@@ -176,6 +176,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
             <div className='relative flex h-[70px] w-full items-center justify-between rounded-full bg-white shadow-[0_12px_40px_rgba(0,0,0,0.25)] backdrop-blur lpg-container overflow-visible md:h-[85px]'>
                <Link
                   href='/'
+                  prefetch={false}
                   className='absolute left-0 flex h-full w-[120px] items-center justify-center rounded-l-full bg-[#EEF0FB] md:w-[175px]'>
                   <div className='relative h-[62px] w-[62px] overflow-hidden rounded-full md:h-[82px] md:w-[82px] md:scale-[1.5]'>
                      <Logo />
@@ -200,6 +201,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                               }>
                               <Link
                                  href={item.href}
+                                 prefetch={false}
                                  aria-haspopup={
                                     hasChildren ? 'menu' : undefined
                                  }
@@ -253,6 +255,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                                              <li key={child.href}>
                                                 <Link
                                                    href={child.href}
+                                                   prefetch={false}
                                                    className='dropdown-item'
                                                    role='menuitem'
                                                    onClick={() =>
@@ -280,6 +283,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                            <div className='flex h-[52px] items-center rounded-full border border-[#d0cece75] bg-gradient-to-br from-[#E3E5EF] to-white px-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.08)]'>
                               <Link
                                  href='/dashboard'
+                                 prefetch={false}
                                  className='flex h-[42px] items-center justify-center rounded-full bg-[#009970] px-5 text-[13px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_6px_18px_rgba(0,166,81,0.25)]'>
                                  Dashboard
                               </Link>
@@ -294,14 +298,16 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                         </div>
                      ) : (
                         <div className='flex h-[52px] items-center rounded-full border border-[#d0cece75] bg-gradient-to-br from-[#E3E5EF] to-white px-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.08)]'>
-                           <Link
-                              href='/login'
-                              className='flex h-8 items-center justify-center px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1C2537]'>
+                              <Link
+                                 href='/login'
+                                 prefetch={false}
+                                 className='flex h-8 items-center justify-center px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1C2537]'>
                               Login
                            </Link>
-                           <Link
-                              href='/register'
-                              className='flex h-[42px] items-center justify-center rounded-full bg-[#009970] px-5 text-[13px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_6px_18px_rgba(0,166,81,0.25)]'>
+                              <Link
+                                 href='/register'
+                                 prefetch={false}
+                                 className='flex h-[42px] items-center justify-center rounded-full bg-[#009970] px-5 text-[13px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_6px_18px_rgba(0,166,81,0.25)]'>
                               Register
                            </Link>
                         </div>
@@ -326,11 +332,12 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                      <nav className='flex flex-col gap-3'>
                         {MAIN_NAV.map(item => (
                            <div key={item.key} className='flex flex-col gap-1'>
-                              <Link
-                                 href={item.href}
-                                 onClick={() => setMobileOpen(false)}
-                                 className={`text-xs font-semibold uppercase tracking-[0.18em] ${
-                                    isActive(item.href)
+                             <Link
+                                href={item.href}
+                                prefetch={false}
+                                onClick={() => setMobileOpen(false)}
+                                className={`text-xs font-semibold uppercase tracking-[0.18em] ${
+                                   isActive(item.href)
                                        ? 'text-[#68B52F]'
                                        : 'text-[#1C2537] hover:text-[#68B52F]'
                                  }`}>
@@ -343,6 +350,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                                        <Link
                                           key={child.href}
                                           href={child.href}
+                                          prefetch={false}
                                           onClick={() => setMobileOpen(false)}
                                           className='text-[10px] font-medium uppercase tracking-[0.14em] text-[#6B7280]'>
                                           {child.label}
@@ -361,6 +369,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                            <>
                               <Link
                                  href='/dashboard'
+                                 prefetch={false}
                                  onClick={() => setMobileOpen(false)}
                                  className='flex-1 rounded-full bg-[#00A651] px-4 py-2 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-white'>
                                  Dashboard
@@ -379,12 +388,14 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                            <>
                               <Link
                                  href='/login'
+                                 prefetch={false}
                                  onClick={() => setMobileOpen(false)}
                                  className='flex-1 rounded-full bg-[#F3F5FA] px-4 py-2 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1C2537]'>
                                  Login
                               </Link>
                               <Link
                                  href='/register'
+                                 prefetch={false}
                                  onClick={() => setMobileOpen(false)}
                                  className='flex-1 rounded-full bg-[#00A651] px-4 py-2 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-white'>
                                  Register
