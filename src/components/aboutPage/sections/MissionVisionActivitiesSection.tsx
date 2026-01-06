@@ -2,15 +2,16 @@
 import AccentCard from '@/components/ui/AccentCard';
 
 const activities: string[] = [
-  'To bring all Autogas station and conversion workshop owners under one unique platform. We are working to get an order from the Ministry of Commerce to make our membership compulsory so that we can build a strong relationship with each and every owner like a family.',
-  'To develop a strong communication and understanding between Autogas station owner and LPG operators.',
-  'To ensure that Autogas stations are getting LPG as per BERC rate from the LPG operators and owner is not violating any terms and conditions with his LPG operator.',
-  'To ensure that all Autogas stations are following the BERC retail price. We have 11 zonal committee in order to implement the BERC retail price all over the country.',
-  'It is very important to increase the conversion of vehicles to LPG. We are working with the concerned government authorities for a duty-free facility in importing conversion kits.',
-  'VAT exemption will help the sector flourish in the line with the government’s priority to promote this alternative fuel. We have already demanded the VAT exemption from the retail price and requested for government subsidies in this Autogas sector in order to establish an acceptable and sustainable retail price.',
-  'To ensure measurement accuracy of the technical issues. For example, the supply of Autogas from road tanker to LPG tank at Autogas station, from LPG dispenser to vehicles, the tank level etc. We demand to engage government authority to make sure of the quantity and quality of this fuel.',
-  'To liaise with the concerned government authorities to make it convenient for the entrepreneurs to set up an Autogas station and conversion workshop.',
-  'To make sure that each Autogas station has an emergency safety plan for prevention of natural disaster or any kind of accident.',
+  'To increase coordination and cooperation between petrol pump owners, dealers, distributors and agents to ensure the country’s energy security.',
+  'To protect the interests of members and to provide regular communication and advice to the government and regulatory agencies in formulating and amending policies, laws and regulations related to the energy sector.',
+  'To conduct awareness activities to maintain transparency, discipline and standards in the petroleum product supply system.',
+  'To monitor and increase awareness on issues related to price, size and quality to ensure consumer-friendly services.',
+  'To implement safety provisions in petrol pumps and fuel distribution systems and provide training and guidance to prevent fires and accidents.',
+  'To encourage the use of environmentally friendly and alternative fuels and play a supportive role in implementing the government’s energy policy.',
+  'To organize training, workshops and seminars to improve the skills of members.',
+  'To take coordinated initiatives with the relevant authorities to maintain normal fuel supply in emergency situations.',
+  'To present reasonable proposals with policymakers for creating an investment-friendly environment in the energy sector and sustainable development.',
+  'To encourage members to ensure responsible and ethical business practices in the national interest.',
 ];
 
 const MissionVisionActivitiesSection = () => {
@@ -30,10 +31,12 @@ const MissionVisionActivitiesSection = () => {
               </h3>
             </div>
             <p className="text-[13px] leading-relaxed text-[#23425A] md:text-[14px]">
-              Our mission is to bring all the Autogas station owners under one unique platform
-              and build strong relationship with each other. The primary goal of the Association
-              is to secure the 80B+ crores investment in this sector by promoting LPG Autogas as
-              an alternative, efficient and environment-friendly fuel.
+              Our mission is to play an effective role in the country&apos;s energy security
+              and economic development, protect the interests of petrol pump owners, dealers,
+              distributors and agents and ensure consumer-friendly, safe and environmentally
+              friendly fuel supply. We are committed to building a modern, sustainable and
+              transparent fuel distribution system through coordination with the government and
+              all relevant stakeholders.
             </p>
           </AccentCard>
 
@@ -48,10 +51,10 @@ const MissionVisionActivitiesSection = () => {
               </h3>
             </div>
             <p className="text-[13px] leading-relaxed text-[#23425A] md:text-[14px]">
-              Our vision is to bring all the Autogas station owners under one unique platform and
-              build strong relationship with each other. The primary goal of the Association is
-              to secure the 80B+ crores investment in this sector by promoting LPG Autogas as an
-              alternative, efficient and environment-friendly fuel.
+              To develop a safe, sustainable and modern fuel supply system in Bangladesh—where
+              the collective participation of petrol pump owners, dealers, distributors and
+              agents ensures a balanced combination of consumer-friendly services, energy
+              security and environmental protection.
             </p>
           </AccentCard>
         </div>
