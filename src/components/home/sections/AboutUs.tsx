@@ -22,7 +22,7 @@ const visionStats: VisionStat[] = [
    },
    {
       icon: iconImg2,
-      label: 'LPG STATIONS',
+      label: 'PETROL PUMPS',
       value: '928',
    },
 ];
@@ -37,13 +37,15 @@ export default function AboutUsSection() {
             <div className='mb-10 text-center'>
                <SectionHeading
                   title=' ABOUT US'
-                  subtitle=' Lorem ipsum dolor sit amet consectetur. Ultrices volutpat
-                  sollicitudin quis at in. In urna fermentum nunc sapien tortor.'
+                  subtitle='A nationally representative association for petroleum dealers,
+                  distributors, agents and petrol pump owners.'
                />
                <h2 className='text-[22px] font-semibold tracking-[0.22em] text-[#203566]'></h2>
                <p className='mt-2 text-[12px] leading-relaxed text-[#7B8EA5]'>
-                  Lorem ipsum dolor sit amet consectetur. Ultrices volutpat
-                  sollicitudin quis at in. In urna fermentum nunc sapien tortor.
+                  The uninterrupted supply of petroleum fuels is essential for industry,
+                  agriculture, transportation and daily life. Our association provides a
+                  unified platform to safeguard members&apos; rights, ensure safe and
+                  consumer-friendly fuel services and support the nation&apos;s energy policies.
                </p>
             </div>
 
@@ -56,20 +58,15 @@ export default function AboutUsSection() {
                   </h3>
 
                   <p className='mt-3 text-[12px] leading-relaxed text-[#5F6F85]'>
-                     Lorem ipsum dolor sit amet consectetur. Sed facilisis eu
-                     blandit lorem sed interdum pellentesque. Lectus egestas
-                     nibh elementum venenatis hendrerit nullam velit augue eros
-                     vitae amet vitae. Blandit posuere consequat consectetur
-                     tempus. Pulvinar vulputate in nibh natoque mauris nunc.
+                     To develop a safe, sustainable and modern fuel supply system in
+                     Bangladesh—where the collective participation of petrol pump owners,
+                     dealers, distributors and agents ensures a balanced combination of
+                     consumer-friendly services, energy security and environmental protection.
                   </p>
                   <p className='mt-3 text-[12px] leading-relaxed text-[#5F6F85]'>
-                     Vitae nec montes convallis nibh volutpat. Aliquet sit
-                     interdum massa et id placerat nunc ultricies nunc. Mauris
-                     sed aliquam et ut nec. Id non ultrices magna adipiscing et
-                     id. Duis elementum nulla id risus nullam sed. Id sed diam
-                     sit amet fames sed scelerisque leo euismod. Sit sit
-                     condimentum viverra donec nunc nunc euismod sem id. Nibh
-                     sed ultrices id eget volutpat enim maecenas.
+                     We are committed to coordinated action with the government and relevant
+                     stakeholders to promote responsible, transparent and investment-friendly
+                     growth across the petroleum distribution sector.
                   </p>
 
                   {/* stats cards */}
@@ -87,7 +84,7 @@ export default function AboutUsSection() {
                   <div className='relative w-full overflow-hidden rounded-[26px] '>
                      <Image
                         src={aboutImg} 
-                        alt='LPG autogas station illustration'
+                        alt='Petrol pump illustration'
                         width={720}
                         height={480}
                         className='h-auto w-full object-cover'
